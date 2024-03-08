@@ -1,0 +1,117 @@
+Most used VBA Procedure is the Sub Procedure, This consists of a set of commands the code should execute
+
+Sub my_macro()
+
+End sub
+
+Function Procedures are commands that create formulas, They return one value (or an array of values), They can be used
+as “normal” formulas in Excel or inside other procedures
+
+Function my_formula()
+
+End function
+
+CTRL + space -> Complete the word
+
+VBA assigns color to keywords and capitalizes code references
+Wrong use of code is shown as red
+Comments (' at the beginning) are shown as green
+
+Excel object's model: Application -> Workbooks -> (Workbook) -> Worksheets -> (Worksheet) -> Range
+
+Property -> What an object has
+Properties comes after the object hierarchy
+
+Method -> What an object does
+Methods can have additional information
+Methods can change properties
+Methods can have argument
+
+Different Methods to Write to Cells
+                                                        A      B       C       D       E       F
+Range("A1").Value = "1st"                           1   "1st"
+Range("A2:B2").Value = "2nd"                        2   "2nd"  "2nd"
+Range("A3:C3, E3:F3").Value = "3rd"                 3   "3rd"  "3rd"   "3rd"           "3rd"   "3rd"
+Range("A4,C4").Value = "4th"                        4   "4th"          "4th"
+Range("A5", "C5").Value = "5th"                     5   "5th"  "5th"   "5th"
+Range("A" & 6, "C" & 6).Value = "6th"               6   "6th"  "6th"   "6th"
+Range("A4:C7").Cells(4, 2).Value = "7th"            7          "7th"
+Range("A1").Offset(7, 2) = "8th"                    8                  "8th"
+Range("A1:B1").Offset(8, 1) = "9th"                 9          "9th"   "9th"
+Range("LastOne").Value = "10th"                    10   "10th"
+
+Referencing Entire Rows / Columns
+
+
+Rows("12:14").RowHeight = 30                            Rows 12, 13 & 14 have a row height of 30
+Range("16:16,18:18,20:20").RowHeight = 30               Rows 16, 18 & 20 are changed. 17 & 19 are not touched.
+Columns("E:F").ColumnWidth=10                           Columns E to F have a column width of 10
+Range("H:H,J:J").ColumnWidth=10                         Columns H & J are changed. Column I is not touched.
+Range(Columns(1), Columns(3)).ColumnWidth = 5           Columns A, B & C have column width of 5
+Cells.Columns.AutoFit                                   All columns are adjusted by autofit
+
+Methods to find the last Row/Column
+Last row
+Range("k6").Value = Cells(Rows.Count, 1).End(xlUp).Row
+Range("k6").Value = Range("A4").End(xlDown).Row
+Range("k11").Value = Cells.SpecialCells(xlCellTypeLastCell).Row
+Range("k12").Value = ActiveSheet.UsedRange.Rows.Count
+
+Last Column
+Range("k8").Value = Cells(4, Columns.Count).End(xlToLeft).Column
+
+Current Region Address
+Range("k9").Value = Range("A5").CurrentRegion.Address
+
+Current Region Rows Number
+Range("k10").Value = Range("A5").CurrentRegion.Rows.Count
+
+Variables And Data Types
+Data Type                Memory used                         Range
+Byte                     1 byte                              0 to 255
+Integer                  2 bytes                       -32,768 to 32,768
+Long                     4 bytes                -2,147,483,648 to 2,147,483,647
+Boolean                  2 bytes                          True / False
+Double                   8 bytes                Very large negative to positive
+                                            range with high precision (also used for %)
+String                   1 byte per char                Depends on length
+Object                   4 bytes                            Any object
+Date                     8 bytes                     01,1,0100 to 12,31,9999
+Currency                 8 bytes                Very large negative to positive
+                                                 range up to 4 decimal places
+Variant                  16 bytes           Any value –can also hold values such as
+                                                 “Empty”, “Nothing” and “Null”
+
+Declaring Variables, Arrays and Constants
+Declaring variables by defining a suitable data type has the outcome:
+1. Your code will run faster 2. Your code will be less prone to mistakes
+
+Dim my Text As String
+Dim LastRow As Long, FirstRow as Long
+
+A group of similar variables that has one name can be declared as an Array
+
+Dim myMonth(1 To 12) As String
+
+If you need to refer to a value that never changes, you can use Constants
+
+Const myScenario As String = "Actual"
+Const ProfitCen As Long = 9999
+
+Variables can also hold objects. Common objects are:
+
+1. Workbook Object          Dim NewBook As Workbook
+2. Worksheet Object         Dim NewSheet As Worksheet
+3. Range Object             Dim NewRange As Range
+
+To assign variables to objects, you need to use the SET statement
+
+Set NewBook = Workbooks.Add
+
+All "usual" VBA assignments are actually done with the LET statement. However this is an optional keyword. That's why
+it's usually not used. In case you come across it, you know what it does.
+
+LastRow = Rows.Count - is the same as Let LastRow = Rows.Count
+
+
+
