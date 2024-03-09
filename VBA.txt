@@ -108,10 +108,124 @@ To assign variables to objects, you need to use the SET statement
 
 Set NewBook = Workbooks.Add
 
-All "usual" VBA assignments are actually done with the LET statement. However this is an optional keyword. That's why
+All "usual" VBA assignments are actually done with the LET statement. However, this is an optional keyword. That's why
 it's usually not used. In case you come across it, you know what it does.
 
 LastRow = Rows.Count - is the same as Let LastRow = Rows.Count
 
+With…End With for Easier coding
+- Faster code writing
+- Easier code maintenance
+- Faster code execution
+- The fewer dots you have, the faster your code will run.
 
+Before
+Set myRange = Range("A10", "A" & Cells(Rows.Count, 1).End(xlUp).Row)
+myRange.Font.Name = “Arial”
+myRange.Font.Size = 12
+myRange.Font.Bold = True
+
+After
+Set myRange = Range("A10", "A" & Cells(Rows.Count, 1).End(xlUp).Row)
+With myRange.Font
+    .Name = “Arial”
+    .Size = 12
+    .Bold = True
+End with
+
+For…Each to Loop Through Collections
+- Execute code for all Worksheets in a Workbook
+- Follow instructions for all Cells inside a Range
+- Run code for each Comment inside the Worksheet Comments collection
+
+Dim Sh As Worksheet
+    For Each Sh In ThisWorkbook.Worksheets
+    Sh.Protect "test“
+Next Sh
+
+Dim cell As Range
+    For Each cell In ActiveSheet.UsedRange
+    ‘[Instructions – you can use IF here to check whether a condition ‘
+    is met – also to exclude parts of the collection]
+Next cell
+
+IF…Then Statements for Conditional Outcomes
+- Similar to Excel formulas, you can use IF…Then in VBA
+- You can handle as many conditions as you see fit
+- You can also use AND, OR statements
+
+One line
+If Range("B3").Value <> "" Then Range("C3").Value = Range("B3").Value
+
+More line
+If Range("B3").Value <> "" Then
+    Range("C3").Value = Range("B3").Value
+End If
+
+Dim Sh As Worksheet
+    For Each Sh In ThisWorkbook.Worksheets
+        If Sh.Name = "Purpose" Then
+            'don't allow formatting etc...
+            Sh.Protect " test"
+        ElseIf Sh.CodeName = "shWith" Then
+            'protect without password
+            Sh.Protect
+        Else
+            'allow formatting for all other sheets
+            Sh.Protect "test",,,,, True, True, True
+        End If
+    Next Sh
+
+Select Case, as Alternative for Many IFs
+- You have a better overview
+- Easier code maintenance
+- Faster code execution. VBA leaves the Select Case construct the moment it arrives at a TRUE. Place the likely cases
+  at the top Of the code.
+
+Select Case Range("B3").Value
+    Case 1 To 200
+        Range("C3").Value = "Good"
+    Case 0
+        Range("C3").Value = ""
+    Case Is > 200
+        Range("C3").Value = "Excellent"
+    Case Else
+        Range("C3").Value = "Bad"
+End Select
+
+To select different specific values, you can also write:
+Case 1,3,7
+
+Goto Statement to Change Program Flow
+- Mainly for error handling
+- Execute a different part of code depending on a condition to use goto
+- Type the name of the label with colon (or number without colon)
+- You might need to Exit sub before the label if you have a message box or another VBA statement
+
+Sub Simple_GoTo()
+    Range("D3").Value = ""
+    If lsError(Range("B3")) Then GoTo GetOut
+    Range("C3").Value = Range("B3").Value
+Exit Sub
+GetOut:
+    Range("D3").Value = "You have an error in the cell"
+End Sub
+
+MSG box Function
+MsgBox "Hello " & Excel.Application.UserName, , "Welcome!"
+
+Dim Answer As VbMsgBoxResult
+Answer = MsgBox("Are you sure about this?" vbYesNo + vbQuestion + vbDefaultButton2, "Clear cells")
+    If Answer = vbYes Then
+        Range("A7:B9").Clear
+    Else
+        Exit Sub
+    End If
+
+VBA’s InputBox Function
+Dim mylnp As String
+mylnp = VBA.lnputBox("Please input subtitle", "Subtitle please...")
+    If mylnp = "" Then
+    Exit sub
+Range("A2").Value Excel.WorksheetFunction.Proper(mylnp)
 
